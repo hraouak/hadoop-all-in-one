@@ -1,0 +1,11 @@
+---
+# tasks file for apt
+- name: install java
+  apt:
+    name: openjdk-8-jdk
+    state: latest
+
+- name: install ssh
+  apt:
+    name: ssh
+    state: latest
