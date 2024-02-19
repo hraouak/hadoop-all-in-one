@@ -1,8 +1,7 @@
 ---
 # tasks file for ssh
 - name: Generate SSH key
-  shell: echo -e " \n \n" | ssh-keygen -t rsa
-  become_user: ubuntu
+  shell: echo -e " \n \n \n \n" | ssh-keygen -t rsa
 
 - name: Append SSH public key to authorized_keys
   shell: cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
