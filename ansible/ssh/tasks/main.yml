@@ -2,12 +2,15 @@
 # tasks file for ssh
 - name: Generate SSH key
   shell: echo -e " \n \n \n \n" | ssh-keygen -t rsa
+  become_user: ubuntu
 
 - name: Append SSH public key to authorized_keys
   shell: cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  become_user: ubuntu
 
 - name: Set permissions for authorized_keys
   ansible.builtin.file:
     path: ~/.ssh/authorized_keys
     mode: '0640'
+    become_user: ubuntu
 
