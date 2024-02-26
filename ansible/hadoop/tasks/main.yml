@@ -13,6 +13,7 @@
   shell: mv hadoop-3.3.6 /usr/bin/hadoop
 
 - name: Add lines to .bashrc
+  become_user: ubuntu
   blockinfile:
     path: ~/.bashrc
     block: |
