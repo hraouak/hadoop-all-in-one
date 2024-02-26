@@ -16,9 +16,8 @@
   become_user: ubuntu
   blockinfile:
     path: ~/.bashrc
-    marker: "<!-- {mark} HADOOP BLOCK -->"
+    marker: "# {mark} HADOOP BLOCK"
     block: |
-    
       export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
       export HADOOP_HOME=/usr/bin/hadoop
       export HADOOP_INSTALL=$HADOOP_HOME
