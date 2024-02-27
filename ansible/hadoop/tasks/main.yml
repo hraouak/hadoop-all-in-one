@@ -48,6 +48,7 @@
   shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
 
 - name: Create Namenode and Datanode directories
+  become_user: ubuntu
   shell: mkdir -p ~/hadoopdata/hdfs/{namenode,datanode}
 
 - name: Delete old config of core-site.xml
