@@ -41,3 +41,25 @@
 
 - name: Add HADOOP OPTS
   shell: export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+
+- name: Edit JAVA_HOME in hadoop-env.sh
+  shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+- name: Create Namenode and Datanode directories
+  shell: mkdir -p ~/hadoopdata/hdfs/{namenode,datanode}
+
+- name: Delete old config of core-site.xml
+  shell: head -n -2 $HADOOP_HOME/etc/hadoop/core-site.xml > temp_core_site.xml && mv temp_core_site.xml $HADOOP_HOME/etc/hadoop/core-site.xml
+
+- name: Add new config to core-site.xml
+  become_user: ubuntu
+  blockinfile:
+    path: $HADOOP_HOME/etc/hadoop/core-site.xml
+    marker: "# {mark} CONFIG BLOCK"
+    block: |
+      <configuration>
+        <property>
+          <name>fs.defaultFS</name>
+          <value>hdfs://localhost:9000</value>
+        </property>
+      </configuration>
