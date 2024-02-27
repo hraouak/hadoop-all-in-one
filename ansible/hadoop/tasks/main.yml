@@ -47,9 +47,13 @@
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
   shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
 
-- name: Create Namenode and Datanode directories
+- name: Create Namenode directory
   become_user: ubuntu
-  shell: mkdir -p ~/hadoopdata/hdfs/{namenode,datanode}
+  shell: mkdir -p ~/hadoopdata/hdfs/namenode
+
+- name: Create Datanode directory
+  become_user: ubuntu
+  shell: mkdir -p ~/hadoopdata/hdfs/datanode
 
 - name: Delete old config of core-site.xml
   vars:
@@ -69,5 +73,33 @@
         <property>
           <name>fs.defaultFS</name>
           <value>hdfs://{{ actual_hostname }}:9000</value>
+        </property>
+      </configuration>
+
+- name: Delete old config of hdfs-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -3 "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" > temp_hdfs_site.xml && mv temp_hdfs_site.xml "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
+
+- name: Add new config to hdfs-site.xml
+  become_user: ubuntu
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+          <property>
+          <name>dfs.replication</name>
+          <value>1</value>
+        </property>
+        <property>
+          <name>dfs.namenode.name.dir</name>
+          <value>file:///home/ubuntu/hadoopdata/hdfs/namenode</value>
+        </property>
+        <property>
+          <name>dfs.datanode.data.dir</name>
+          <value>file:///home/ubuntu/hadoopdata/hdfs/datanode</value>
         </property>
       </configuration>
