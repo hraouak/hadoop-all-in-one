@@ -53,13 +53,15 @@
 
 - name: Add new config to core-site.xml
   become_user: ubuntu
+  vars:
+    actual_hostname: "{{ ansible_hostname }}"
   blockinfile:
-    path: $HADOOP_HOME/etc/hadoop/core-site.xml
+    path: "{{ lookup('env', 'HADOOP_HOME') }}/etc/hadoop/core-site.xml"
     marker: "# {mark} CONFIG BLOCK"
     block: |
       <configuration>
         <property>
           <name>fs.defaultFS</name>
-          <value>hdfs://localhost:9000</value>
+          <value>hdfs://{{ actual_hostname }}:9000</value>
         </property>
       </configuration>
