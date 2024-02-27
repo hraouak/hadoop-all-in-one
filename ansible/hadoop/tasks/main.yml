@@ -103,3 +103,31 @@
           <value>file:///home/ubuntu/hadoopdata/hdfs/datanode</value>
         </property>
       </configuration>
+
+- name: Delete old config of mapred-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -3 "{{ hadoop_home }}/etc/hadoop/mapred-site.xml" > temp_mapred_site.xml && mv temp_mapred_site.xml "{{ hadoop_home }}/etc/hadoop/mapred-site.xml"
+
+- name: Add new config to mapred-site.xml
+  become_user: ubuntu
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/mapred-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+        <property>
+          <name>yarn.app.mapreduce.am.env</name>
+          <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
+        </property>
+        <property>
+          <name>mapreduce.map.env</name>
+          <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
+        </property>
+        <property>
+          <name>mapreduce.reduce.env</name>
+          <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
+        </property>
+      </configuration>
