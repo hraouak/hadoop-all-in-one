@@ -63,7 +63,7 @@
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
   blockinfile:
     path: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
-    marker: "# {mark} CONFIG BLOCK"
+    marker: ""
     block: |
       <configuration>
         <property>
