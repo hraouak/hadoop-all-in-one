@@ -131,3 +131,25 @@
           <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
         </property>
       </configuration>
+
+- name: Delete old config of yarn-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -5 "{{ hadoop_home }}/etc/hadoop/yarn-site.xml" > temp_yarn_site.xml && mv temp_yarn_site.xml "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
+
+- name: Add new config to yarn-site.xml
+  become_user: ubuntu
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+        <property>
+          <name>yarn.nodemanager.aux-services</name>
+          <value>mapreduce_shuffle</value>
+        </property>
+      </configuration>
+
+
