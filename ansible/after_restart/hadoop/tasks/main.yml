@@ -1,0 +1,106 @@
+---
+# tasks file for hadoop
+
+- name: Edit JAVA_HOME in hadoop-env.sh
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh'
+
+- name: Create Namenode directory
+  shell: mkdir -p ~/hadoopdata/hdfs/namenode
+
+- name: Create Datanode directory
+  shell: mkdir -p ~/hadoopdata/hdfs/datanode
+
+- name: Delete old config of core-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -2 "{{ hadoop_home }}/etc/hadoop/core-site.xml" > temp_core_site.xml && mv temp_core_site.xml "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+
+- name: Add new config to core-site.xml
+  vars:
+    actual_hostname: "{{ ansible_hostname }}"
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/core-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+        <property>
+          <name>fs.defaultFS</name>
+          <value>hdfs://{{ actual_hostname }}:9000</value>
+        </property>
+      </configuration>
+
+- name: Delete old config of hdfs-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -3 "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" > temp_hdfs_site.xml && mv temp_hdfs_site.xml "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
+
+- name: Add new config to hdfs-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+          <property>
+          <name>dfs.replication</name>
+          <value>1</value>
+        </property>
+        <property>
+          <name>dfs.namenode.name.dir</name>
+          <value>file:///home/ubuntu/hadoopdata/hdfs/namenode</value>
+        </property>
+        <property>
+          <name>dfs.datanode.data.dir</name>
+          <value>file:///home/ubuntu/hadoopdata/hdfs/datanode</value>
+        </property>
+      </configuration>
+
+- name: Delete old config of mapred-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -3 "{{ hadoop_home }}/etc/hadoop/mapred-site.xml" > temp_mapred_site.xml && mv temp_mapred_site.xml "{{ hadoop_home }}/etc/hadoop/mapred-site.xml"
+
+- name: Add new config to mapred-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/mapred-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+        <property>
+          <name>yarn.app.mapreduce.am.env</name>
+          <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
+        </property>
+        <property>
+          <name>mapreduce.map.env</name>
+          <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
+        </property>
+        <property>
+          <name>mapreduce.reduce.env</name>
+          <value>HADOOP_MAPRED_HOME=/usr/bin/hadoop/bin/hadoop</value>
+        </property>
+      </configuration>
+
+- name: Delete old config of yarn-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: head -n -5 "{{ hadoop_home }}/etc/hadoop/yarn-site.xml" > temp_yarn_site.xml && mv temp_yarn_site.xml "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
+
+- name: Add new config to yarn-site.xml
+  vars:
+    hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
+  blockinfile:
+    path: "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
+    marker: ""
+    block: |
+      <configuration>
+        <property>
+          <name>yarn.nodemanager.aux-services</name>
+          <value>mapreduce_shuffle</value>
+        </property>
+      </configuration>

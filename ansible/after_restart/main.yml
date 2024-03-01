@@ -1,8 +1,7 @@
 ---
-- name: before restart playbook
+- name: after restart playbook
   hosts: localhost
   become: yes
 
   roles:
-    - apt
     - hadoop
