@@ -45,7 +45,7 @@
 - name: Edit JAVA_HOME in hadoop-env.sh
   vars:
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
-  shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
+  shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' '{{ hadoop_home }}/etc/hadoop/hadoop-env.sh'
 
 - name: Create Namenode directory
   shell: mkdir -p ~/hadoopdata/hdfs/namenode
