@@ -15,7 +15,7 @@
 
 - name: Add environment variable exports to .bashrc
   blockinfile:
-    path: ~/.bashrc
+    path: /home/ubuntu/.bashrc
     marker: ""
     block: |
       export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
