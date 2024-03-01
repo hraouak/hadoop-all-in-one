@@ -48,11 +48,9 @@
   shell: sed -i 's/^.*JAVA_HOME=\/.*/JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/' "{{ hadoop_home }}/etc/hadoop/hadoop-env.sh"
 
 - name: Create Namenode directory
-  become_user: ubuntu
   shell: mkdir -p ~/hadoopdata/hdfs/namenode
 
 - name: Create Datanode directory
-  become_user: ubuntu
   shell: mkdir -p ~/hadoopdata/hdfs/datanode
 
 - name: Delete old config of core-site.xml
@@ -61,7 +59,6 @@
   shell: head -n -2 "{{ hadoop_home }}/etc/hadoop/core-site.xml" > temp_core_site.xml && mv temp_core_site.xml "{{ hadoop_home }}/etc/hadoop/core-site.xml"
 
 - name: Add new config to core-site.xml
-  become_user: ubuntu
   vars:
     actual_hostname: "{{ ansible_hostname }}"
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
@@ -82,7 +79,6 @@
   shell: head -n -3 "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml" > temp_hdfs_site.xml && mv temp_hdfs_site.xml "{{ hadoop_home }}/etc/hadoop/hdfs-site.xml"
 
 - name: Add new config to hdfs-site.xml
-  become_user: ubuntu
   vars:
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
   blockinfile:
@@ -110,7 +106,6 @@
   shell: head -n -3 "{{ hadoop_home }}/etc/hadoop/mapred-site.xml" > temp_mapred_site.xml && mv temp_mapred_site.xml "{{ hadoop_home }}/etc/hadoop/mapred-site.xml"
 
 - name: Add new config to mapred-site.xml
-  become_user: ubuntu
   vars:
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
   blockinfile:
@@ -138,7 +133,6 @@
   shell: head -n -5 "{{ hadoop_home }}/etc/hadoop/yarn-site.xml" > temp_yarn_site.xml && mv temp_yarn_site.xml "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
 
 - name: Add new config to yarn-site.xml
-  become_user: ubuntu
   vars:
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
   blockinfile:
