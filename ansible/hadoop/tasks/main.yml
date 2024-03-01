@@ -12,56 +12,25 @@
 - name: Rename folder
   shell: sudo mv hadoop-3.3.6 /usr/bin/hadoop
 
-- name: Add JAVA HOME
-  become_user: ubuntu
-  environment:
-    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
-  shell: echo "Setting JAVA_HOME"
+- name: Add environment variables
+  blockinfile:
+    path: "/home/ubuntu/.bashrc"
+    marker: ""
+    block: |
+      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+      export HADOOP_HOME=/usr/bin/hadoop
+      export HADOOP_INSTALL=$HADOOP_HOME
+      export HADOOP_MAPRED_HOME=$HADOOP_HOME
+      export HADOOP_COMMON_HOME=$HADOOP_HOME
+      export HADOOP_HDFS_HOME=$HADOOP_HOME
+      export HADOOP_YARN_HOME=$HADOOP_HOME
+      export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+      export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+      export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 
-- name: Add HADOOP HOME
-  environment:
-    HADOOP_HOME: "/usr/bin/hadoop"
-  shell: echo "Setting HADOOP_HOME"
+- name: Source the bashrc
+  shell: source /home/ubuntu/.bashrc
 
-- name: Add HADOOP INSTALL
-  environment:
-    HADOOP_INSTALL: "{{ lookup('env', 'HADOOP_HOME') }}"
-  shell: echo "Setting HADOOP_INSTALL"
-
-- name: Add HADOOP MAPRED HOME
-  environment:
-    HADOOP_MAPRED_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
-  shell: echo "Setting HADOOP_MAPRED_HOME"
-
-- name: Add HADOOP COMMON HOME
-  environment:
-    HADOOP_COMMON_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
-  shell: echo "Setting HADOOP_COMMON_HOME"
-
-- name: Add HADOOP HDFS HOME
-  environment:
-    HADOOP_HDFS_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
-  shell: echo "Setting HADOOP_HDFS_HOME"
-
-- name: Add HADOOP YARN HOME
-  environment:
-    HADOOP_YARN_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
-  shell: echo "Setting HADOOP_YARN_HOME"
-
-- name: Add HADOOP COMMON LIB NATIVE DIR
-  environment:
-    HADOOP_COMMON_LIB_NATIVE_DIR: "{{ lookup('env', 'HADOOP_HOME') }}/lib/native"
-  shell: echo "Setting HADOOP_COMMON_LIB_NATIVE_DIR"
-
-- name: Recreate PATH
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ lookup('env', 'HADOOP_HOME') }}/sbin:{{ lookup('env', 'HADOOP_HOME') }}/bin"
-  shell: echo "Recreating PATH"
-
-- name: Add HADOOP OPTS
-  environment:
-    HADOOP_OPTS: "-Djava.library.path={{ lookup('env', 'HADOOP_HOME') }}/lib/native"
-  shell: echo "Setting HADOOP_OPTS"
 
 - name: Edit JAVA_HOME in hadoop-env.sh
   vars:
