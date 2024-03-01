@@ -10,7 +10,7 @@
   shell: rm hadoop-3.3.6.tar.gz
 
 - name: Rename folder
-  shell: mv hadoop-3.3.6 /usr/bin/hadoop
+  shell: sudo mv hadoop-3.3.6 /usr/bin/hadoop
 
 - name: Add JAVA HOME
   shell: export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
