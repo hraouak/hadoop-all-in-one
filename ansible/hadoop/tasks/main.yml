@@ -29,6 +29,7 @@
       export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 
 - name: Source the bashrc
+  become_user: ubuntu
   shell: . /home/ubuntu/.bashrc
 
 
