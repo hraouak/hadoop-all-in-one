@@ -15,42 +15,52 @@
 - name: Add JAVA HOME
   environment:
     JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+  shell: echo "Setting JAVA_HOME"
 
 - name: Add HADOOP HOME
   environment:
     HADOOP_HOME: "/usr/bin/hadoop"
+  shell: echo "Setting HADOOP_HOME"
 
 - name: Add HADOOP INSTALL
   environment:
     HADOOP_INSTALL: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: echo "Setting HADOOP_INSTALL"
 
 - name: Add HADOOP MAPRED HOME
   environment:
     HADOOP_MAPRED_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: echo "Setting HADOOP_MAPRED_HOME"
 
 - name: Add HADOOP COMMON HOME
   environment:
     HADOOP_COMMON_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: echo "Setting HADOOP_COMMON_HOME"
 
 - name: Add HADOOP HDFS HOME
   environment:
     HADOOP_HDFS_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: echo "Setting HADOOP_HDFS_HOME"
 
 - name: Add HADOOP YARN HOME
   environment:
     HADOOP_YARN_HOME: "{{ lookup('env', 'HADOOP_HOME') }}"
+  shell: echo "Setting HADOOP_YARN_HOME"
 
 - name: Add HADOOP COMMON LIB NATIVE DIR
   environment:
     HADOOP_COMMON_LIB_NATIVE_DIR: "{{ lookup('env', 'HADOOP_HOME') }}/lib/native"
+  shell: echo "Setting HADOOP_COMMON_LIB_NATIVE_DIR"
 
 - name: Recreate PATH
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ lookup('env', 'HADOOP_HOME') }}/sbin:{{ lookup('env', 'HADOOP_HOME') }}/bin"
+  shell: echo "Recreating PATH"
 
 - name: Add HADOOP OPTS
   environment:
     HADOOP_OPTS: "-Djava.library.path={{ lookup('env', 'HADOOP_HOME') }}/lib/native"
+  shell: echo "Setting HADOOP_OPTS"
 
 - name: Edit JAVA_HOME in hadoop-env.sh
   vars:
