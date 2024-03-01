@@ -13,25 +13,35 @@
   become_user: ubuntu
   shell: sudo mv hadoop-3.3.6 /usr/bin/hadoop
 
-- name: Add environment variables
-  blockinfile:
-    path: "/home/ubuntu/.bashrc"
-    marker: ""
-    block: |
-      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-      export HADOOP_HOME=/usr/bin/hadoop
-      export HADOOP_INSTALL=$HADOOP_HOME
-      export HADOOP_MAPRED_HOME=$HADOOP_HOME
-      export HADOOP_COMMON_HOME=$HADOOP_HOME
-      export HADOOP_HDFS_HOME=$HADOOP_HOME
-      export HADOOP_YARN_HOME=$HADOOP_HOME
-      export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
-      export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
-      export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+- name: Add JAVA HOME
+  shell: export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-- name: Source the bashrc
-  shell: bash
+- name: Add HADOOP HOME
+  shell: export HADOOP_HOME=/usr/bin/hadoop
 
+- name: Add HADOOP INSTALL
+  shell: export HADOOP_INSTALL=$HADOOP_HOME
+
+- name: Add HADOOP MAPRED HOME
+  shell: export HADOOP_MAPRED_HOME=$HADOOP_HOME
+
+- name: Add HADOOP COMMON HOME
+  shell: export HADOOP_COMMON_HOME=$HADOOP_HOME
+
+- name: Add HADOOP HDFS HOME
+  shell: export HADOOP_HDFS_HOME=$HADOOP_HOME
+
+- name: Add HADOOP YARN HOME
+  shell: export HADOOP_YARN_HOME=$HADOOP_HOME
+
+- name: Add HADOOP COMMON LIB NATIVE DIR
+  shell: export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+      
+- name: Recreate PATH
+  shell: export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+
+- name: Add HADOOP OPTS
+  shell: export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 
 - name: Edit JAVA_HOME in hadoop-env.sh
   vars:
