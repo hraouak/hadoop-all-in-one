@@ -94,10 +94,10 @@
 - name: Add new config to yarn-site.xml
   vars:
     hadoop_home: "{{ lookup('env', 'HADOOP_HOME') }}"
-  blockinfile:
+  lineinfile:
     path: "{{ hadoop_home }}/etc/hadoop/yarn-site.xml"
-    marker: ""
-    block: |
+    insertafter: EOF
+    line: |
       <configuration>
         <property>
           <name>yarn.nodemanager.aux-services</name>
