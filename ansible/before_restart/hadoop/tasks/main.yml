@@ -18,7 +18,7 @@
     path: /home/ubuntu/.bashrc
     marker: ""
     block: |
-      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64
       export HADOOP_HOME=/usr/bin/hadoop
       export HADOOP_INSTALL=$HADOOP_HOME
       export HADOOP_MAPRED_HOME=$HADOOP_HOME

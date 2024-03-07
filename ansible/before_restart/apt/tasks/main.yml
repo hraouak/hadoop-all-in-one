@@ -9,3 +9,8 @@
   apt:
     name: ssh
     state: latest
+
+- name: install net tools
+  apt:
+    name: net-tools
+    state: latest
