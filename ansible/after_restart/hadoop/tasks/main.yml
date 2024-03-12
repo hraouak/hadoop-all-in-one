@@ -107,3 +107,4 @@
 
 - name: Start hadoop cluster
   shell: hdfs namenode -format
+  become_user: ubuntu
