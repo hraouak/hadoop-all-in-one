@@ -9,7 +9,5 @@
   become_user: ubuntu
 
 - name: Set permissions for authorized_keys
-  ansible.builtin.file:
-    path: /home/ubuntu/.ssh/authorized_keys
-    mode: '0640'
-    become_user: ubuntu
+  shell: chmod 0640 /home/ubuntu/.ssh/authorized_keys
+  become_user: ubuntu
